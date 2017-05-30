@@ -23,8 +23,10 @@ public class ElasticSearchService implements ISearchService {
 
 	private String host;
 	private int port;
-	private List<String> indexList;
-	private List<String> typeList;
+	private List<String> indexList;        //multiple indexes to perform search upon
+	private List<String> typeList;         //multiple types to perform search upon
+	private int from;                      //search result range
+	private int to;                        //search result range
 	
 	private TransportClient client;
 	private PreBuiltTransportClient preBuiltTransportClient;
@@ -35,6 +37,8 @@ public class ElasticSearchService implements ISearchService {
 		this.port = propertiesConfig.getPort();
 		this.indexList = propertiesConfig.getIndexList();
 		this.typeList = propertiesConfig.getTypeList();
+		this.from = propertiesConfig.getFrom();
+		this.to= propertiesConfig.getTo();
 		
 		this.client = this.getTransportClient();
 	}
@@ -53,7 +57,7 @@ public class ElasticSearchService implements ISearchService {
 		
 		return client.prepareSearch(indexArray).setTypes(typeArray)
 				.setQuery(QueryBuilders.simpleQueryStringQuery(queryTerm))
-				.setFrom(0).setSize(10).setExplain(true)
+				.setFrom(this.from).setSize(this.to).setExplain(true)
 				.get();
 
 	}
