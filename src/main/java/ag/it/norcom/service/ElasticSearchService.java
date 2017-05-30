@@ -10,15 +10,11 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import ag.it.norcom.config.PropertiesConfig;
 
 @Service
-@PropertySource("app.properties")
-@ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticSearchService implements ISearchService {
 
 	private String host;
@@ -57,7 +53,7 @@ public class ElasticSearchService implements ISearchService {
 		
 		return client.prepareSearch(indexArray).setTypes(typeArray)
 				.setQuery(QueryBuilders.simpleQueryStringQuery(queryTerm))
-				.setFrom(this.from).setSize(this.to).setExplain(true)
+				.setFrom(this.from).setSize(this.to).setExplain(false)
 				.get();
 
 	}
